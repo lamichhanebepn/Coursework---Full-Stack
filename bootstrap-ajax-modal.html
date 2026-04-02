@@ -1,0 +1,107 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Ajax + Bootstrap Modal</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+  <div class="container mt-4">
+    <h1>Ajax + Bootstrap Modal Demo</h1>
+
+    <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+      Load Books
+    </button>
+
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+      <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+
+          <div class="modal-header">
+            <h1 class="modal-title fs-5" id="exampleModalLabel">Available Books</h1>
+            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+          </div>
+
+          <div class="modal-body">
+            <table id="ajaxContent" class="table table-striped">
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Book Name</th>
+                  <th>Released Date</th>
+                  <th>Rating</th>
+                </tr>
+              </thead>
+              <tbody id="ajaxBody">
+                <tr>
+                  <td colspan="4">Click “Load Books” to fetch data.</td>
+                </tr>
+              </tbody>
+            </table>
+            <div id="errorMessage" class="text-danger mt-2"></div>
+          </div>
+
+          <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"></script>
+
+  <script>
+    const modal = document.getElementById('exampleModal');
+
+    modal.addEventListener('show.bs.modal', () => {
+      const body = document.getElementById("ajaxBody");
+      const errorMsg = document.getElementById("errorMessage");
+
+      body.innerHTML = `
+        <tr>
+          <td colspan="4" class="text-center">
+            <div class="spinner-border" role="status">
+              <span class="visually-hidden">Loading...</span>
+            </div>
+          </td>
+        </tr>
+      `;
+      errorMsg.textContent = "";
+
+      fetch('ajax.php')
+        .then(response => {
+          if (!response.ok) {
+            throw new Error("HTTP error");
+          }
+          return response.json();
+        })
+        .then(data => {
+          body.innerHTML = "";
+
+          if (data.length === 0) {
+            body.innerHTML = `<tr><td colspan="4"><em>No books found.</em></td></tr>`;
+            return;
+          }
+
+          data.forEach(book => {
+            body.innerHTML += `
+              <tr>
+                <td>${book.Book_id}</td>
+                <td>${book.Book_name}</td>
+                <td>${book.released_date}</td>
+                <td>${book.rating}</td>
+              </tr>
+            `;
+          });
+        })
+        .catch(() => {
+          body.innerHTML = "";
+          errorMsg.textContent = "Error loading data. Please try again.";
+        });
+    });
+  </script>
+</body>
+</html>
