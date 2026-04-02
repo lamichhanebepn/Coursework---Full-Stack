@@ -1,0 +1,38 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Add Book{% endblock %}
+
+{% block content %}
+<div class="card shadow p-4">
+    <h2 class="mb-4">Add New Book</h2>
+
+    {% if msg %}
+        <div class="alert alert-info">{{ msg }}</div>
+    {% endif %}
+
+    <form action="insert-book.php" method="post">
+        <div class="mb-3">
+            <label class="form-label">Book Name</label>
+            <input type="text" name="book_name" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Book Description</label>
+            <textarea name="book_description" class="form-control" rows="5" required></textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Released Date</label>
+            <input type="date" name="released_date" class="form-control" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Rating</label>
+            <input type="number" name="rating" class="form-control" min="1" max="10" required>
+        </div>
+
+        <button type="submit" class="btn btn-success">Save Book</button>
+        <a href="list-books.php" class="btn btn-secondary">Back</a>
+    </form>
+</div>
+{% endblock %}
