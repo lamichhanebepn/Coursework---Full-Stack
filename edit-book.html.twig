@@ -1,0 +1,36 @@
+{% extends "base.html.twig" %}
+
+{% block title %}Edit Book{% endblock %}
+
+{% block content %}
+<div class="card shadow p-4">
+    <h2 class="mb-4">Edit Book</h2>
+
+    <form action="update-book.php" method="post">
+        <input type="hidden" name="id" value="{{ book.Book_id }}">
+
+        <div class="mb-3">
+            <label class="form-label">Book Name</label>
+            <input type="text" name="book_name" class="form-control" value="{{ book.Book_name }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Book Description</label>
+            <textarea name="book_description" class="form-control" rows="5" required>{{ book.Book_description }}</textarea>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Released Date</label>
+            <input type="date" name="released_date" class="form-control" value="{{ book.released_date }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Rating</label>
+            <input type="number" name="rating" class="form-control" min="1" max="10" value="{{ book.rating }}" required>
+        </div>
+
+        <button type="submit" class="btn btn-primary">Update Book</button>
+        <a href="list-books.php" class="btn btn-secondary">Back</a>
+    </form>
+</div>
+{% endblock %}
